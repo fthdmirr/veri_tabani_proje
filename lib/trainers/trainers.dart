@@ -17,7 +17,7 @@ class _TrainersState extends State<Trainers> {
   bool isLoading = false;
   List<Trainer> trainers = [];
   bool isQuery = false;
-  late final TrainerDataSource dataSoruce;
+  TrainerDataSource dataSoruce = TrainerDataSource(trainers: []);
 
   Future getAllDatas() async {
     setLoading();
@@ -41,11 +41,15 @@ class _TrainersState extends State<Trainers> {
 
   Future getIdQuery(int id) async {
     trainers = await trainersDatabase.queryID(id);
+    dataSoruce = TrainerDataSource(trainers: trainers);
+
     setState(() {});
   }
 
   Future getSalaryQuery(int id) async {
     trainers = await trainersDatabase.quetySalary(id);
+    dataSoruce = TrainerDataSource(trainers: trainers);
+
     setState(() {});
   }
 

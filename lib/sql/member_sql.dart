@@ -52,12 +52,6 @@ class MemberDatabase {
     return result;
   }
 
-  Future<int> update(Member note) async {
-    Database db = await database;
-    var result = await db.update(_memberTable, note.toMap(), where: "id=?", whereArgs: [note.id]);
-    return result;
-  }
-
   Future<List<Member>> queryHeight(int threshold) async {
     Database db = await database;
     List<Member> members = [];

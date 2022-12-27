@@ -16,7 +16,7 @@ class _MembersState extends State<Members> {
   final membersDatabase = MemberDatabase();
   bool isLoading = false;
   List<Member> members = [];
-  late final MemberDataSource dataSoruce;
+  MemberDataSource dataSoruce = MemberDataSource(members: []);
   bool isQuery = false;
 
   changeQueryStatus() {
@@ -38,21 +38,37 @@ class _MembersState extends State<Members> {
 
   Future getHeightQuery(int height) async {
     members = await membersDatabase.queryHeight(height);
+    dataSoruce = MemberDataSource(members: members);
+
     setState(() {});
   }
 
   Future getWeightQuery(int height) async {
     members = await membersDatabase.queryWeight(height);
+    dataSoruce = MemberDataSource(members: members);
+
     setState(() {});
   }
 
   Future getNameQuery(String name) async {
     members = await membersDatabase.queryName(name);
+    dataSoruce = MemberDataSource(members: members);
+
     setState(() {});
   }
 
-  Future getQueryStatus(String name) async {
-    members = await membersDatabase.queryStatus(name);
+  Future getQueryStatus(String trainer) async {
+    members = await membersDatabase.queryStatus(trainer);
+    dataSoruce = MemberDataSource(members: members);
+
+    setState(() {});
+  }
+
+  Future deleteMember(int nenberID) async {
+    await membersDatabase.delete(nenberID);
+    members = await membersDatabase.getAllMember();
+    dataSoruce = MemberDataSource(members: members);
+
     setState(() {});
   }
 
@@ -88,6 +104,7 @@ class _MembersState extends State<Members> {
         child: Column(children: <Widget>[
           if (isQuery)
             Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Row(
                   children: [
@@ -140,17 +157,17 @@ class _MembersState extends State<Members> {
                       ),
                     ),
                     const SizedBox(width: 25),
-                    const Text('status: '),
+                    const Text('delete: '),
                     SizedBox(
                       width: 100,
                       height: 20,
                       child: TextFormField(
                         decoration: const InputDecoration(
                           border: OutlineInputBorder(),
-                          label: Text('Status'),
+                          label: Text('id'),
                         ),
                         onFieldSubmitted: (value) async {
-                          await getQueryStatus(value);
+                          await deleteMember(int.parse(value));
                         },
                       ),
                     ),

@@ -30,7 +30,6 @@ class TrainerDatabase {
     );
   }
 
-  //Crud Methods
   Future<List<Trainer>> getAllTrainer() async {
     Database db = await database;
     var result = await db.query(_trainerTable);
